@@ -33,9 +33,9 @@ function getFiles(dir, files_) {
                     let ext = imageName.substr(imageName.lastIndexOf('.') + 1);
                     var fileName = ""
                     if (imgNameWithOutExtension.length < 4) {
-                        fileName = "image_place_"+countryCode+"_"+imgNameWithOutExtension
+                        fileName = "mh_memgame_place_"+countryCode+"_"+imgNameWithOutExtension
                     } else {
-                        fileName = "mage_flag_"+ countryCode
+                        fileName = "mh_memgame_flag_"+ countryCode
                     }
                     let newfileNameWithExtenstion = fileName + "." + ext
                     let newDir = name + "/" + fileName
@@ -79,20 +79,28 @@ function renameFile(currentPath, newPath) {
 function copyFile(newDirPathToMove, ext, fileName) {
     console.log(newDirPathToMove, ext, fileName)
     
-    // fs.copyFile(newDirPathToMove, "android-assests/"+fileName+"."+ext, (err) => {
-    //     if (err) throw err;
-    // });
-    // console.log(fileName)
-    webp.cwebp(newDirPathToMove,"android-assests/"+fileName+".webp","-q 90",function(status,error)
-  {
-  	 //if conversion successful status will be '100'
-  	//if conversion fails status will be '101'
-  	console.log(status,error);	
-  });
+    fs.copyFile(newDirPathToMove, "android-assests/png/"+fileName+"."+ext, (err) => {
+        if (err) throw err;
+        webp.cwebp("android-assests/png/"+fileName+"."+ext,"android-assests/webp/"+fileName+".webp","-q 90",function(status,error) {
+             //if conversion successful status will be '100'
+            //if conversion fails status will be '101'
+            console.log(status,error);	
+        });
+    });
+    console.log(fileName)
+   
 }
 
 if (!fs.existsSync("android-assests")) {
     fs.mkdirSync("android-assests");
+    fs.mkdirSync();
+    fs.mkdirSync("android-assests/webp");
 }
-getFiles('imagesToMap')
-fs.writeFileSync('imageMap.json', JSON.stringify(list));
+fs.mkdir("android-assests/png", { recursive: true }, (err) => {
+    if (err) throw err;
+});
+fs.mkdir("android-assests/webp", { recursive: true }, (err) => {
+    if (err) throw err;
+});
+getFiles('country')
+fs.writeFileSync('MHMemoryGame.json', JSON.stringify(list));

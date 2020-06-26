@@ -31,9 +31,9 @@ function getFiles(dir, files_) {
                     let ext = imageName.substr(imageName.lastIndexOf('.') + 1);
                     var fileName = ""
                     if (imgNameWithOutExtension.length < 4) {
-                        fileName = "images_place_"+countryCode+"_"+imgNameWithOutExtension
+                        fileName = "mh_memgame_place_"+countryCode+"_"+imgNameWithOutExtension
                     } else {
-                        fileName = "images_flag_"+ countryCode
+                        fileName = "mh_memgame_flag_"+ countryCode
                     }
                     let newfileNameWithExtenstion = fileName + "@3x." + ext
                     let newDir = name + "/" + fileName
@@ -100,4 +100,4 @@ if (!fs.existsSync("imageset")) {
     fs.mkdirSync("imageset");
 }
 getFiles('country')
-fs.writeFileSync('imageMap-ios.json', JSON.stringify(list));
+fs.writeFileSync('MHMemoryGame.json', JSON.stringify(list));

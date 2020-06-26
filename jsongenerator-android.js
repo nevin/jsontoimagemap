@@ -81,7 +81,7 @@ function copyFile(newDirPathToMove, ext, fileName) {
     
     fs.copyFile(newDirPathToMove, "android-assests/png/"+fileName+"."+ext, (err) => {
         if (err) throw err;
-        webp.cwebp("android-assests/png/"+fileName+"."+ext,"android-assests/webp/"+fileName+".webp","-q 90",function(status,error) {
+        webp.cwebp("android-assests/png/"+fileName+"."+ext,"android-assests/webp/img_memgame_"+fileName+".webp","-q 90",function(status,error) {
              //if conversion successful status will be '100'
             //if conversion fails status will be '101'
             console.log(status,error);	

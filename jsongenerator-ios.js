@@ -66,7 +66,9 @@ function getFiles(dir, files_) {
 }
 
 function renameFile(currentPath, newPath) {
-    console.log(newPath)
+    console.log("-->")
+    console.log(currentPath,newPath)
+    console.log("<--")
     fs.renameSync(currentPath, newPath, function (err) {
         if (err) {
             console.log("error" + err)
@@ -96,8 +98,44 @@ function createContentJSON(newDirPathToMove, fileNamewitext, fileName) {
     });
 
 }
+
+
+
 if (!fs.existsSync("imageset")) {
     fs.mkdirSync("imageset");
 }
-getFiles('country')
-fs.writeFileSync('MHMemoryGame.json', JSON.stringify(list));
+// getFiles('country')
+// fs.writeFileSync('MHMemoryGame.json', JSON.stringify(list));
+
+
+
+
+var gameimageprefix = "img_memgame_"
+
+function covertToAssets(dir, files_) {
+    files_ = files_ || [];
+    var files = fs.readdirSync(dir);
+    for (var i in files) {
+        var name = dir + '/' + files[i];
+        if (files[i] != ".DS_Store") {
+            if (fs.statSync(name).isDirectory()) {
+                covertToAssets(name);
+            } else {
+               console.log("files-->"+name)
+                let fileName = files[i], fileNameWithOutSpace = files[i].replace(/ /g,"_")
+                let fileNameWithOutExtension = fileNameWithOutSpace.replace(/\.[^/.]+$/, "")
+                let ext = fileName.substr(fileName.lastIndexOf('.') + 1);
+                console.log(fileName,fileNameWithOutExtension,ext )
+                let newFileName=gameimageprefix+fileNameWithOutExtension+"@3x."+ext
+                let newAssetPath = 'imageset/'+gameimageprefix+fileNameWithOutExtension
+                if (!fs.existsSync(newAssetPath)) {
+                    fs.mkdirSync(newAssetPath);
+                    renameFile(name,newAssetPath+"/"+newFileName)
+                    createContentJSON(newAssetPath, newFileName, gameimageprefix+fileNameWithOutExtension)
+                }
+            }
+        }
+    }
+}
+
+covertToAssets("game_images")

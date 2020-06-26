@@ -91,16 +91,33 @@ function copyFile(newDirPathToMove, ext, fileName) {
    
 }
 
-if (!fs.existsSync("android-assests")) {
-    fs.mkdirSync("android-assests");
-    fs.mkdirSync();
-    fs.mkdirSync("android-assests/webp");
+function convertFiles(dir, files_) {
+    files_ = files_ || [];
+    var files = fs.readdirSync(dir);
+    for (var i in files) {
+        var name = dir + '/' + files[i];
+        if (files[i] != ".DS_Store") {
+            if (fs.statSync(name).isDirectory()) {
+                let directoryName = files[i]
+                console.log(files[i])
+                convertFiles(name)
+            } else {
+                console.log("files-->")
+                let fileName = files[i], fileNameWithOutSpace = files[i].replace(/ /g,"_")
+                let imgNameWithOutExtension = fileNameWithOutSpace.replace(/\.[^/.]+$/, "")
+                let ext = fileName.substr(fileName.lastIndexOf('.') + 1);
+                copyFile( dir + '/' +fileName, ext, imgNameWithOutExtension)
+            }
+        }
+    }
 }
+
 fs.mkdir("android-assests/png", { recursive: true }, (err) => {
     if (err) throw err;
 });
 fs.mkdir("android-assests/webp", { recursive: true }, (err) => {
     if (err) throw err;
 });
-getFiles('country')
-fs.writeFileSync('MHMemoryGame.json', JSON.stringify(list));
+// getFiles('country')
+// fs.writeFileSync('MHMemoryGame.json', JSON.stringify(list));
+convertFiles("game_images")
